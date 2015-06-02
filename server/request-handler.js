@@ -29,6 +29,45 @@ var requestHandler = function(request, response) {
   // console.logs in your code.
   console.log("Serving request type " + request.method + " for url " + request.url);
 
+  var message = {
+  results: [{username: "John", text: "Goodbye World", roomname: "public"}]};
+
+// if (request.method === "POST") {
+//   var requestBody = '';
+//   request.on('data', function(chunk){
+//     requestBody += chunk;
+//   console.log("received");
+//   messages.results.push(JSON.parse(requestBody));
+// });
+
+//   request.on('end', function(){
+//     response.writeHead(200, {"Content-type": "application/json"});
+//     // response.write(requestBody);
+//     return stringifyJSON(message);
+//   })
+
+// };
+
+
+  if(request.method === "POST"){
+    request.on('data', function(chunk){
+      message.results.push(JSON.parse(chunk));
+    });
+    request.on('end', function(){
+      response.writeHead(200, "OK", {"Content-type": "text/html"});
+      response.end();
+    })
+  }
+
+
+
+
+
+
+
+
+
+
   // The outgoing status.
   var statusCode = 200;
 
@@ -39,10 +78,12 @@ var requestHandler = function(request, response) {
   //
   // You will need to change this if you are sending something
   // other than plain text, like JSON or HTML.
-  headers['Content-Type'] = "text/plain";
+  headers['Content-Type'] = "JSON";
 
   // .writeHead() writes to the request line and headers of the response,
   // which includes the status and all headers.
+
+
   response.writeHead(statusCode, headers);
 
   // Make sure to always call response.end() - Node may not send
@@ -52,8 +93,12 @@ var requestHandler = function(request, response) {
   //
   // Calling .end "flushes" the response's internal buffer, forcing
   // node to actually send all the data over to the client.
-  response.end("Hello, World!");
+  response.end(JSON.stringify(message));
+
 };
+
+
+
 
 // These headers will allow Cross-Origin Resource Sharing (CORS).
 // This code allows this server to talk to websites that
@@ -70,4 +115,9 @@ var defaultCorsHeaders = {
   "access-control-allow-headers": "content-type, accept",
   "access-control-max-age": 10 // Seconds.
 };
+
+
+module.exports.requestHandler = requestHandler;
+
+
 

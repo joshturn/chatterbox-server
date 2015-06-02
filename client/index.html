@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>chatterbox</title>
+    <link rel="stylesheet" href="styles/styles.css">
+
+    <!-- dependencies -->
+    <script src="bower_components/jquery/jquery.min.js"></script>
+    <script src="bower_components/underscore/underscore-min.js"></script>
+    <script src="bower_components/backbone/backbone-min.js"></script>
+    <!-- your scripts -->
+    <script src="env/config.js"></script>
+    <script src="scripts/app-backbone.js"></script>
+    <!-- <script src="scripts/app.js"></script> -->
+  </head>
+  <body>
+    <div id="main">
+      <h1>chatterbox</h1>
+      <h3>Friends</h3>
+      <div id="friends"></div>
+      <br>
+      <!-- Load Texts -->
+      <!-- <button type="button" class="refreshBtn">Refresh</button> -->
+
+      <!-- Chatroom -->
+      <div id="roomSelect">
+        <form id="chatroom">
+          <h2 id="room">Room: Public</h2>
+          <input type="text" name="roomname">
+          <br>
+          <button type="submit">Create Room</button>
+          <button id="leave">Leave Room</button>
+        </form>
+      </div>
+
+
+      <!-- Send Message -->
+      <form id="sender">
+        <p>Username</p>
+        <input type="text" id="formName">
+        <p>Message</p>
+        <input type="text" id="formMsg">
+        <br>
+        <button type="submit">Submit</button>
+      </form>
+      <!-- Your HTML goes here! -->
+
+      <!-- SpecRunner -->
+      <div id="chats"></div>
+
+
+      <!-- Ours -->
+      <div class="messages"></div>
+
+    </div>
+  </body>
+</html>
