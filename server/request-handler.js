@@ -11,7 +11,8 @@ this file and include it in basic-server.js so that it actually works.
 *Hint* Check out the node module documentation at http://nodejs.org/api/modules.html.
 
 **************************************************************/
-
+var url = require('url');
+var data = [];
 var requestHandler = function(request, response) {
   // Request and Response come from node's http module.
   //
@@ -29,47 +30,34 @@ var requestHandler = function(request, response) {
   // console.logs in your code.
   console.log("Serving request type " + request.method + " for url " + request.url);
 
-  var message = {
-  results: [{username: "John", text: "Goodbye World", roomname: "public"}]};
 
-// if (request.method === "POST") {
-//   var requestBody = '';
-//   request.on('data', function(chunk){
-//     requestBody += chunk;
-//   console.log("received");
-//   messages.results.push(JSON.parse(requestBody));
-// });
-
-//   request.on('end', function(){
-//     response.writeHead(200, {"Content-type": "application/json"});
-//     // response.write(requestBody);
-//     return stringifyJSON(message);
-//   })
-
-// };
+  var statusCode;
+  var message;
 
 
-  if(request.method === "POST"){
-    request.on('data', function(chunk){
-      message.results.push(JSON.parse(chunk));
-    });
-    request.on('end', function(){
-      response.writeHead(200, "OK", {"Content-type": "text/html"});
-      response.end();
-    })
+
+  if (request.url === '/classes/messages' || request.url === '/classes/room1'){
+    if (request.method === "GET") {
+      statusCode = 200;
+      message = JSON.stringify({results: data});
+    } else if (request.method === "POST") {
+        statusCode = 201;
+        var requestBody = '';
+        request.on('data', function(chunk) {
+          requestBody += chunk.toString();
+        });
+        request.on('end', function() {
+          data.push(JSON.parse(requestBody));
+          console.log(message);
+        });
+      }
+    }
+   else {
+    statusCode = 404;
   }
 
 
-
-
-
-
-
-
-
-
   // The outgoing status.
-  var statusCode = 200;
 
   // See the note below about CORS headers.
   var headers = defaultCorsHeaders;
@@ -78,7 +66,7 @@ var requestHandler = function(request, response) {
   //
   // You will need to change this if you are sending something
   // other than plain text, like JSON or HTML.
-  headers['Content-Type'] = "JSON";
+  headers['Content-Type'] = 'application/json';
 
   // .writeHead() writes to the request line and headers of the response,
   // which includes the status and all headers.
@@ -93,7 +81,7 @@ var requestHandler = function(request, response) {
   //
   // Calling .end "flushes" the response's internal buffer, forcing
   // node to actually send all the data over to the client.
-  response.end(JSON.stringify(message));
+  response.end((message));
 
 };
 
